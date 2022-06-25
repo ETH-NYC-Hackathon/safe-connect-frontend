@@ -16,11 +16,12 @@
     "noImplicitAny": true,
     "importHelpers": true,
     "skipLibCheck": true,
-    "strictNullChecks": true,
+    "strictNullChecks": false,
     "allowSyntheticDefaultImports": true,
     "suppressImplicitAnyIndexErrors": true,
     "noUnusedLocals": true,
     "resolveJsonModule": true,
+    
     "types": ["react", "jest"]
   },
   "exclude": [

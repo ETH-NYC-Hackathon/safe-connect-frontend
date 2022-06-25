@@ -4,6 +4,11 @@ import { createGlobalStyle } from "styled-components";
 
 import App from "./App";
 import { globalStyle } from "./styles";
+
+
+import 'bootstrap/dist/css/bootstrap.css';
+
+
 const GlobalStyle = createGlobalStyle`
   ${globalStyle}
 `;

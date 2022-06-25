@@ -13,7 +13,6 @@ const SHeader = styled.div`
   align-items: center;
   justify-content: space-between;
   padding: 0 16px;
-  border-bottom: 1px solid #87CEEB;
 `;
 
 const SActiveAccount = styled.div`
@@ -94,13 +93,13 @@ const Header = ({ connected, address, chainId, killSession }: IHeaderProps) => {
   }
 
   return (
-    <SHeader>
+    <SHeader className="border-bottom border-white">
       {connected && (
         <SActiveChain>
           {activeChain ? (
             <>
-              <p>Network Connected:</p>
-              <p>{activeChain}</p>
+              <p className='text-white'>Network Connected:</p>
+              <p className='text-white'>{activeChain}</p>
             </>
           ) : (
             <SUnsupportedChain>
@@ -111,12 +110,15 @@ const Header = ({ connected, address, chainId, killSession }: IHeaderProps) => {
         </SActiveChain>
       )}
       {address && (
-        <SActiveAccount>
-          <SBlockie address={address} />
+        <SActiveAccount className="text-white">
+          <SBlockie address={address}/>
+          
           <SAddress connected={connected}>{ellipseAddress(address)}</SAddress>
+          <button type="button" className="btn btn-outline-primary" onClick={killSession}>Sign Out
           <SDisconnect connected={connected} onClick={killSession}>
-            {"Disconnect"}
+            <></>
           </SDisconnect>
+        </button>
         </SActiveAccount>
       )}
     </SHeader>

@@ -23,6 +23,10 @@ import { IAssetData } from "./helpers/types";
 import AccountAssets from "./components/AccountAssets";
 import { eip712 } from "./helpers/eip712";
 
+
+
+import './app.css';
+
 const SLayout = styled.div`
   position: relative;
   width: 100%;
@@ -117,6 +121,8 @@ const SValue = styled.div`
   width: 70%;
   font-family: monospace;
 `;
+
+
 
 
 interface IAppState {
@@ -641,6 +647,11 @@ class App extends React.Component<any, any> {
     }
   };
 
+
+
+      
+  
+
   public render = () => {
     const {
       assets,
@@ -653,7 +664,7 @@ class App extends React.Component<any, any> {
       result,
     } = this.state;
     return (
-      <SLayout>
+      <SLayout className='bg-black'>
         <Column maxWidth={1000} spanHeight>
           <Header
             connected={connected}
@@ -664,11 +675,17 @@ class App extends React.Component<any, any> {
           <SContent>
             {!address && !assets.length ? (
               <SLanding center>
-                <h3>
-                  {`deScam`}
-                  <br />
-                  <span>no one likes getting scammed</span>
-                </h3>
+                <div className="flex min-h-screen flex-col items-center">
+        <br />
+        <main className="flex w-full flex-1 flex-col items-center  px-20 text-center">
+        <link href='https://fonts.googleapis.com/css?family=Poppins' rel='stylesheet' />
+
+              <h1 className="poppinsFont text-white border border-white">Welcome to SafeConnect</h1>
+       
+
+      </main>
+      
+    </div>
                 <SButtonContainer>
                   <SConnectButton left onClick={this.connect} fetching={fetching}>
                     {"Connect to WalletConnect"}
@@ -676,15 +693,18 @@ class App extends React.Component<any, any> {
                 </SButtonContainer>
               </SLanding>
             ) : (
-              <SBalances>
+              <SBalances className='text-white'>
                 <h3>verify the integrity of your Wallet connection</h3>
-                <Column center>
-                  <h1>hello</h1>
-                </Column>
+                
                 <STestButton left onClick={this.testPersonalSignMessage}>
                       {"Verify Website"}
                 </STestButton>
-                <h3>Balances</h3>
+                <h3>or manually type in a website!</h3>
+                
+                <ul id="myList" />
+
+                <input type="text" id="myInput" />
+                <button id="myButton">Submit</button>
 
                 {!fetching ? (
                   <AccountAssets chainId={chainId} assets={assets} />
@@ -722,7 +742,7 @@ class App extends React.Component<any, any> {
             </SModalContainer>
           ) : (
             <SModalContainer>
-              <SModalTitle>{"Call Request Rejected"}</SModalTitle>
+              <SModalTitle>{"Call Request Completed"}</SModalTitle>
             </SModalContainer>
           )}
         </Modal>
