@@ -665,6 +665,8 @@ class App extends React.Component<any, any> {
     const input = (document.getElementById("myInput") as HTMLTextAreaElement).value;
     if (dataset.indexOf(input) > -1) {
       document.getElementsByTagName("ul")[0].innerHTML = input + " IS VERIFIED";
+      // clear the input field
+      (document.getElementById("myInput") as HTMLTextAreaElement).value = "";
     } else {
       document.getElementsByTagName("ul")[0].innerHTML = input + " IS A SCAM";
     }
