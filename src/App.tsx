@@ -648,6 +648,27 @@ class App extends React.Component<any, any> {
   };
 
 
+   // create a basic function
+ public checkString = () => {
+    const dataset = ["www.opensea.io", "www.rarible.com", "www.uniswap.com"];
+    const list = document.getElementById("myList");
+
+    dataset.forEach((item) => {
+      const li = document.createElement("li");
+      li.innerText = item;
+      list.appendChild(li);
+    });
+
+    // function checkString() {
+     
+    // }
+    const input = (document.getElementById("myInput") as HTMLTextAreaElement).value;
+    if (dataset.indexOf(input) > -1) {
+      document.getElementsByTagName("ul")[0].innerHTML = input + " IS VERIFIED";
+    } else {
+      document.getElementsByTagName("ul")[0].innerHTML = input + " IS A SCAM";
+    }
+}
 
       
   
@@ -699,12 +720,12 @@ class App extends React.Component<any, any> {
                 <STestButton left onClick={this.testPersonalSignMessage}>
                       {"Verify Website"}
                 </STestButton>
-                <h3>or manually type in a website!</h3>
+                <h3>or manually type in a website! (ex: www.opensea.io)</h3>
                 
                 <ul id="myList" />
 
                 <input type="text" id="myInput" />
-                <button id="myButton">Submit</button>
+                <button id="myButton" onClick={this.checkString}>Submit</button>
 
                 {!fetching ? (
                   <AccountAssets chainId={chainId} assets={assets} />
