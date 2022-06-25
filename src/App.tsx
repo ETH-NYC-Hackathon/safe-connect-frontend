@@ -20,7 +20,6 @@ import {
 } from "./helpers/utilities";
 import { convertAmountToRawNumber, convertStringToHex } from "./helpers/bignumber";
 import { IAssetData } from "./helpers/types";
-import Banner from "./components/Banner";
 import AccountAssets from "./components/AccountAssets";
 import { eip712 } from "./helpers/eip712";
 
@@ -94,6 +93,15 @@ const STable = styled(SContainer as any)`
   text-align: left;
 `;
 
+const STestButton = styled(Button as any)`
+  border-radius: 8px;
+  font-size: ${fonts.size.medium};
+  height: 44px;
+  width: 100%;
+  max-width: 175px;
+  margin: 12px;
+`;
+
 const SRow = styled.div`
   width: 100%;
   display: flex;
@@ -110,22 +118,6 @@ const SValue = styled.div`
   font-family: monospace;
 `;
 
-const STestButtonContainer = styled.div`
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-wrap: wrap;
-`;
-
-const STestButton = styled(Button as any)`
-  border-radius: 8px;
-  font-size: ${fonts.size.medium};
-  height: 44px;
-  width: 100%;
-  max-width: 175px;
-  margin: 12px;
-`;
 
 interface IAppState {
   connector: WalletConnect | null;
@@ -155,10 +147,15 @@ const INITIAL_STATE: IAppState = {
   assets: [],
 };
 
+
+
+
 class App extends React.Component<any, any> {
   public state: IAppState = {
     ...INITIAL_STATE,
   };
+
+  
 
   public connect = async () => {
     // bridge url
@@ -431,6 +428,8 @@ class App extends React.Component<any, any> {
     }
   };
 
+
+  
   public testLegacySignMessage = async () => {
     const { connector, address, chainId } = this.state;
 
@@ -439,7 +438,7 @@ class App extends React.Component<any, any> {
     }
 
     // test message
-    const message = `My email is john@doe.com - ${new Date().toUTCString()}`;
+    const message = `this website is shit`;
 
     // hash message
     const hash = hashMessage(message);
@@ -530,21 +529,37 @@ class App extends React.Component<any, any> {
     }
   };
 
+
+
   public testPersonalSignMessage = async () => {
+    
     const { connector, address, chainId } = this.state;
 
     if (!connector) {
       return;
     }
 
-    // test message
-    const message = `My email is john@doe.com - ${new Date().toUTCString()}`;
+  
+    let message = ``;
+
+    if (location.href === "http://localhost:3000/" || location.href === "www.opensea.io/") {
+      message = `TRUSTED WEBSITE ${location.href} would like to connect with you.`;
+    }
+    else {
+      message = `DANGER!!! DANGER!!! DANGER!!! This is not a verified website.`;
+    }
+
+    
+   
+    
 
     // encode message (hex)
-    const hexMsg = convertUtf8ToHex(message);
+     const hexMsg = convertUtf8ToHex(message);
 
     // eth_sign params
     const msgParams = [hexMsg, address];
+
+    
 
     try {
       // open modal
@@ -650,9 +665,9 @@ class App extends React.Component<any, any> {
             {!address && !assets.length ? (
               <SLanding center>
                 <h3>
-                  {`Try out WalletConnect`}
+                  {`deScam`}
                   <br />
-                  <span>{`v${process.env.REACT_APP_VERSION}`}</span>
+                  <span>no one likes getting scammed</span>
                 </h3>
                 <SButtonContainer>
                   <SConnectButton left onClick={this.connect} fetching={fetching}>
@@ -662,31 +677,15 @@ class App extends React.Component<any, any> {
               </SLanding>
             ) : (
               <SBalances>
-                <Banner />
-                <h3>Actions</h3>
+                <h3>verify the integrity of your Wallet connection</h3>
                 <Column center>
-                  <STestButtonContainer>
-                    <STestButton left onClick={this.testSendTransaction}>
-                      {"eth_sendTransaction"}
-                    </STestButton>
-                    <STestButton left onClick={this.testSignTransaction}>
-                      {"eth_signTransaction"}
-                    </STestButton>
-                    <STestButton left onClick={this.testSignTypedData}>
-                      {"eth_signTypedData"}
-                    </STestButton>
-                    <STestButton left onClick={this.testLegacySignMessage}>
-                      {"eth_sign (legacy)"}
-                    </STestButton>
-                    <STestButton left onClick={this.testStandardSignMessage}>
-                      {"eth_sign (standard)"}
-                    </STestButton>
-                    <STestButton left onClick={this.testPersonalSignMessage}>
-                      {"personal_sign"}
-                    </STestButton>
-                  </STestButtonContainer>
+                  <h1>hello</h1>
                 </Column>
+                <STestButton left onClick={this.testPersonalSignMessage}>
+                      {"Verify Website"}
+                </STestButton>
                 <h3>Balances</h3>
+
                 {!fetching ? (
                   <AccountAssets chainId={chainId} assets={assets} />
                 ) : (

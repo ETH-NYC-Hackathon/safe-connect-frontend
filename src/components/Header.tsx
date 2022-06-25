@@ -13,6 +13,7 @@ const SHeader = styled.div`
   align-items: center;
   justify-content: space-between;
   padding: 0 16px;
+  border-bottom: 1px solid #87CEEB;
 `;
 
 const SActiveAccount = styled.div`
@@ -98,7 +99,7 @@ const Header = ({ connected, address, chainId, killSession }: IHeaderProps) => {
         <SActiveChain>
           {activeChain ? (
             <>
-              <p>Connected to</p>
+              <p>Network Connected:</p>
               <p>{activeChain}</p>
             </>
           ) : (
