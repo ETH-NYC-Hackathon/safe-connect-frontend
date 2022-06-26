@@ -23,7 +23,7 @@ import { IAssetData } from "./helpers/types";
 import AccountAssets from "./components/AccountAssets";
 import { eip712 } from "./helpers/eip712";
 
-
+import Locks from './assets/locks.png'
 
 import './app.css';
 
@@ -665,10 +665,10 @@ class App extends React.Component<any, any> {
     const input = (document.getElementById("myInput") as HTMLTextAreaElement).value;
     if (dataset.indexOf(input) > -1) {
       document.getElementsByTagName("ul")[0].innerHTML = input + " IS VERIFIED";
-      // clear the input field
       (document.getElementById("myInput") as HTMLTextAreaElement).value = "";
     } else {
       document.getElementsByTagName("ul")[0].innerHTML = input + " IS A SCAM";
+      (document.getElementById("myInput") as HTMLTextAreaElement).value = "";
     }
 }
 
@@ -702,7 +702,7 @@ class App extends React.Component<any, any> {
         <br />
         <main className="flex w-full flex-1 flex-col items-center  px-20 text-center">
         <link href='https://fonts.googleapis.com/css?family=Poppins' rel='stylesheet' />
-
+              <img src={Locks} />
               <h1 className="poppinsFont text-white border border-white">Welcome to SafeConnect</h1>
        
 
@@ -775,3 +775,5 @@ class App extends React.Component<any, any> {
 }
 
 export default App;
+
+

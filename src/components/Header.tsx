@@ -4,6 +4,9 @@ import Blockie from "./Blockie";
 import { ellipseAddress, getChainData } from "../helpers/utilities";
 import { transitions } from "../styles";
 
+
+import './Header.css'
+
 const SHeader = styled.div`
   margin-top: -1px;
   margin-bottom: 1px;
@@ -93,7 +96,7 @@ const Header = ({ connected, address, chainId, killSession }: IHeaderProps) => {
   }
 
   return (
-    <SHeader className="border-bottom border-white">
+    <SHeader className="">
       {connected && (
         <SActiveChain>
           {activeChain ? (
