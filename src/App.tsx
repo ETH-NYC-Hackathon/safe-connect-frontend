@@ -729,7 +729,7 @@ class App extends React.Component<any, any> {
               </SLanding>
             ) : (
               <SBalances className="text-white">
-                <h3>verify the integrity of your Wallet connection</h3>
+                <h3>sample dapp connect</h3>
 
                 <STestButton left onClick={this.testPersonalSignMessage}>
                   {"Verify Website"}
