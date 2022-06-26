@@ -727,7 +727,7 @@ class App extends React.Component<any, any> {
                 <ul id="myList" />
 
                 <input type="text" id="myInput" />
-                <button id="myButton" onClick={this.checkString}>Submit</button>
+                <STestButton id="myButton" onClick={this.checkString}>Submit</STestButton>
 
                 {!fetching ? (
                   <AccountAssets chainId={chainId} assets={assets} />
