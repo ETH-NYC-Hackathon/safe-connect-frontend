@@ -678,11 +678,11 @@ class App extends React.Component<any, any> {
 
     let output = input;
     if (uriStatus === "verified") {
-      output = input + " IS VERIFIED";
+      output = `✅ ${input} IS VERIFIED`;
     } else if (uriStatus === "warning") {
-      output = input + " IS WARNING";
+      output = `⚠️ ${input} IS WARNING`;
     } else {
-      output = input + " IS SCAM";
+      output = `🚨 ${input} IS SCAM`;
     }
     document.getElementsByTagName("ul")[0].innerHTML = output;
     (document.getElementById("myInput") as HTMLTextAreaElement).value = "";
@@ -736,7 +736,13 @@ class App extends React.Component<any, any> {
                 </STestButton>
                 <h3>or manually type in a website! (ex: www.opensea.io)</h3>
 
-                <ul id="myList" />
+                <ul
+                  id="myList"
+                  style={{
+                    fontSize: "32px",
+                    padding: "16px",
+                  }}
+                />
 
                 <input type="text" id="myInput" />
                 <STestButton id="myButton" onClick={this.checkString}>
