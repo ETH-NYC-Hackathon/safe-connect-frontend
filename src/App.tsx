@@ -22,8 +22,6 @@ import { convertAmountToRawNumber, convertStringToHex } from "./helpers/bignumbe
 import { IAssetData } from "./helpers/types";
 import AccountAssets from "./components/AccountAssets";
 import { eip712 } from "./helpers/eip712";
-// import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-// import { faCoffee } from '@fortawesome/free-solid-svg-icons'
 
 import Locks from './assets/locks.png'
 
