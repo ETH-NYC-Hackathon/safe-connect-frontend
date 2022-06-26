@@ -11,7 +11,7 @@ import Modal from "./components/Modal";
 import Header from "./components/Header";
 import Loader from "./components/Loader";
 import { fonts } from "./styles";
-import { getSafeConnectRegistryData } from "./helpers/contracts/registry/index";
+import { getSafeConnectRegistryData } from "./helpers/contracts/registry";
 import { apiGetAccountAssets, apiGetGasPrices, apiGetAccountNonce } from "./helpers/api";
 import {
   sanitizeHex,
