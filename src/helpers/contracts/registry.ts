@@ -1,12 +1,9 @@
 import { ethers } from "ethers";
-// import { SUPPORTED_CHAINS } from "../../chains";
 
-export const getSafeConnectRegistryContract = () => {
-  const provider = new ethers.providers.JsonRpcProvider(
-    "https://rinkeby.infura.io/v3/dd9e0e8a902143c4be774ccf9ded3ba3",
-  );
+export const getRegistryContractForOpKovan = () => {
+  const provider = new ethers.providers.JsonRpcProvider("https://kovan.optimism.io", 69);
   return new ethers.Contract(
-    "0x8697cA459d2B7e462f0c754c6D9387d248b66205",
+    "0xdf08F459e2C6e1886B2976BB175D2264E7D734C3",
     [
       {
         inputs: [
@@ -69,7 +66,7 @@ export const getSafeConnectRegistryData = async (
   host: string,
   origin: string,
 ) => {
-  const contract = getSafeConnectRegistryContract();
+  const contract = getRegistryContractForOpKovan();
   const abiCoder = new ethers.utils.AbiCoder();
   const result = await contract.functions.getUri(
     ethers.utils.keccak256(

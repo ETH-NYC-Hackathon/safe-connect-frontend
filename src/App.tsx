@@ -640,35 +640,52 @@ class App extends React.Component<any, any> {
     const input = (document.getElementById("myInput") as HTMLTextAreaElement).value;
 
     let result = [];
-    let verified = false;
+    let uriStatus: "verified" | "warning" | "error" | "none" = "none";
     if (input.match(new RegExp("https://"))) {
       const split = input.split("://");
       const protocol = split[0];
       const host = split[1];
       const origin = input;
       result = await getSafeConnectRegistryData(split[0], split[1], input);
-      verified =
-        result.protocol === protocol && result.host === host && result.origin === origin
-          ? true
-          : false;
+      console.log(result);
+      if (result.protocol === protocol && result.host === host && result.origin === origin) {
+        uriStatus =
+          result.status === "0x3b909987" // bytes4("VERIFIED")
+            ? "verified"
+            : result.status === "0x51aac253" // bytes4("WARNING")
+            ? "warning"
+            : "error";
+      } else {
+        uriStatus = "error";
+      }
     } else {
       const protocol = "https";
       const host = input;
       const origin = `${protocol}://${host}`;
       result = await getSafeConnectRegistryData(protocol, input, origin);
-      verified =
-        result.protocol === protocol && result.host === host && result.origin === origin
-          ? true
-          : false;
+      console.log(result);
+      if (result.protocol === protocol && result.host === host && result.origin === origin) {
+        uriStatus =
+          result.status === "0x3b909987" // bytes4("VERIFIED")
+            ? "verified"
+            : result.status === "0x51aac253" // bytes4("WARNING")
+            ? "warning"
+            : "error";
+      } else {
+        uriStatus = "error";
+      }
     }
 
-    if (verified) {
-      document.getElementsByTagName("ul")[0].innerHTML = input + " IS VERIFIED";
-      (document.getElementById("myInput") as HTMLTextAreaElement).value = "";
+    let output = input;
+    if (uriStatus === "verified") {
+      output = input + " IS VERIFIED";
+    } else if (uriStatus === "warning") {
+      output = input + " IS WARNING";
     } else {
-      document.getElementsByTagName("ul")[0].innerHTML = input + " IS A SCAM";
-      (document.getElementById("myInput") as HTMLTextAreaElement).value = "";
+      output = input + " IS SCAM";
     }
+    document.getElementsByTagName("ul")[0].innerHTML = output;
+    (document.getElementById("myInput") as HTMLTextAreaElement).value = "";
   };
 
   public render = () => {
@@ -722,9 +739,9 @@ class App extends React.Component<any, any> {
                 <ul id="myList" />
 
                 <input type="text" id="myInput" />
-                <button id="myButton" onClick={this.checkString}>
+                <STestButton id="myButton" onClick={this.checkString}>
                   Submit
-                </button>
+                </STestButton>
 
                 {!fetching ? (
                   <AccountAssets chainId={chainId} assets={assets} />
