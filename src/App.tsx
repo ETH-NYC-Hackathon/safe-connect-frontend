@@ -11,6 +11,7 @@ import Modal from "./components/Modal";
 import Header from "./components/Header";
 import Loader from "./components/Loader";
 import { fonts } from "./styles";
+import { getSafeConnectRegistryData } from "./helpers/contracts/registry/index";
 import { apiGetAccountAssets, apiGetGasPrices, apiGetAccountNonce } from "./helpers/api";
 import {
   sanitizeHex,
@@ -22,10 +23,9 @@ import { convertAmountToRawNumber, convertStringToHex } from "./helpers/bignumbe
 import { IAssetData } from "./helpers/types";
 import AccountAssets from "./components/AccountAssets";
 import { eip712 } from "./helpers/eip712";
+import Locks from "./assets/locks.png";
 
-import Locks from './assets/locks.png'
-
-import './app.css';
+import "./app.css";
 
 const SLayout = styled.div`
   position: relative;
@@ -122,9 +122,6 @@ const SValue = styled.div`
   font-family: monospace;
 `;
 
-
-
-
 interface IAppState {
   connector: WalletConnect | null;
   fetching: boolean;
@@ -153,15 +150,10 @@ const INITIAL_STATE: IAppState = {
   assets: [],
 };
 
-
-
-
 class App extends React.Component<any, any> {
   public state: IAppState = {
     ...INITIAL_STATE,
   };
-
-  
 
   public connect = async () => {
     // bridge url
@@ -434,8 +426,6 @@ class App extends React.Component<any, any> {
     }
   };
 
-
-  
   public testLegacySignMessage = async () => {
     const { connector, address, chainId } = this.state;
 
@@ -535,37 +525,26 @@ class App extends React.Component<any, any> {
     }
   };
 
-
-
   public testPersonalSignMessage = async () => {
-    
     const { connector, address, chainId } = this.state;
 
     if (!connector) {
       return;
     }
 
-  
     let message = ``;
 
     if (location.href === "http://localhost:3000/" || location.href === "www.opensea.io/") {
-      message = `✅ https://app.uniswap.org/ Trusted website, you are safe to proceed.`;      
-    }
-    else {
+      message = `TRUSTED WEBSITE ${location.href} would like to connect with you.`;
+    } else {
       message = `DANGER!!! DANGER!!! DANGER!!! This is not a verified website.`;
     }
 
-    
-   
-    
-
     // encode message (hex)
-     const hexMsg = convertUtf8ToHex(message);
+    const hexMsg = convertUtf8ToHex(message);
 
     // eth_sign params
     const msgParams = [hexMsg, address];
-
-    
 
     try {
       // open modal
@@ -647,33 +626,50 @@ class App extends React.Component<any, any> {
     }
   };
 
+  // create a basic function
+  public checkString = async () => {
+    // const dataset = ["www.opensea.io", "www.rarible.com", "www.uniswap.com"];
+    // const list = document.getElementById("myList");
 
-   // create a basic function
- public checkString = () => {
-    const dataset = ["www.opensea.io", "www.rarible.com", "www.uniswap.com"];
-    const list = document.getElementById("myList");
+    // dataset.forEach(item => {
+    //   const li = document.createElement("li");
+    //   li.innerText = item;
+    //   list.appendChild(li);
+    // });
 
-    dataset.forEach((item) => {
-      const li = document.createElement("li");
-      li.innerText = item;
-      list.appendChild(li);
-    });
-
-    // function checkString() {
-     
-    // }
     const input = (document.getElementById("myInput") as HTMLTextAreaElement).value;
-    if (dataset.indexOf(input) > -1) {
+
+    let result = [];
+    let verified = false;
+    if (input.match(new RegExp("https://"))) {
+      const split = input.split("://");
+      const protocol = split[0];
+      const host = split[1];
+      const origin = input;
+      result = await getSafeConnectRegistryData(split[0], split[1], input);
+      verified =
+        result.protocol === protocol && result.host === host && result.origin === origin
+          ? true
+          : false;
+    } else {
+      const protocol = "https";
+      const host = input;
+      const origin = `${protocol}://${host}`;
+      result = await getSafeConnectRegistryData(protocol, input, origin);
+      verified =
+        result.protocol === protocol && result.host === host && result.origin === origin
+          ? true
+          : false;
+    }
+
+    if (verified) {
       document.getElementsByTagName("ul")[0].innerHTML = input + " IS VERIFIED";
       (document.getElementById("myInput") as HTMLTextAreaElement).value = "";
     } else {
       document.getElementsByTagName("ul")[0].innerHTML = input + " IS A SCAM";
       (document.getElementById("myInput") as HTMLTextAreaElement).value = "";
     }
-}
-
-      
-  
+  };
 
   public render = () => {
     const {
@@ -687,7 +683,7 @@ class App extends React.Component<any, any> {
       result,
     } = this.state;
     return (
-      <SLayout className='bg-black'>
+      <SLayout className="bg-black">
         <Column maxWidth={1000} spanHeight>
           <Header
             connected={connected}
@@ -699,16 +695,15 @@ class App extends React.Component<any, any> {
             {!address && !assets.length ? (
               <SLanding center>
                 <div className="flex min-h-screen flex-col items-center">
-        <br />
-        <main className="flex w-full flex-1 flex-col items-center  px-20 text-center">
-        <link href='https://fonts.googleapis.com/css?family=Poppins' rel='stylesheet' />
-              <img src={Locks} />
-              <h1 className="poppinsFont text-white border border-white">Welcome to SafeConnect</h1>
-       
-
-      </main>
-      
-    </div>
+                  <br />
+                  <main className="flex w-full flex-1 flex-col items-center  px-20 text-center">
+                    <link href="https://fonts.googleapis.com/css?family=Poppins" rel="stylesheet" />
+                    <img src={Locks} />
+                    <h1 className="poppinsFont text-white border border-white">
+                      Welcome to SafeConnect
+                    </h1>
+                  </main>
+                </div>
                 <SButtonContainer>
                   <SConnectButton left onClick={this.connect} fetching={fetching}>
                     {"Connect to WalletConnect"}
@@ -716,18 +711,20 @@ class App extends React.Component<any, any> {
                 </SButtonContainer>
               </SLanding>
             ) : (
-              <SBalances className='text-white'>
+              <SBalances className="text-white">
                 <h3>verify the integrity of your Wallet connection</h3>
-                
+
                 <STestButton left onClick={this.testPersonalSignMessage}>
-                      {"Verify Website"}
+                  {"Verify Website"}
                 </STestButton>
                 <h3>or manually type in a website! (ex: www.opensea.io)</h3>
-                
+
                 <ul id="myList" />
 
                 <input type="text" id="myInput" />
-                <STestButton id="myButton" onClick={this.checkString}>Submit</STestButton>
+                <button id="myButton" onClick={this.checkString}>
+                  Submit
+                </button>
 
                 {!fetching ? (
                   <AccountAssets chainId={chainId} assets={assets} />
@@ -775,5 +772,3 @@ class App extends React.Component<any, any> {
 }
 
 export default App;
-
-
