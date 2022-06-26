@@ -22,6 +22,8 @@ import { convertAmountToRawNumber, convertStringToHex } from "./helpers/bignumbe
 import { IAssetData } from "./helpers/types";
 import AccountAssets from "./components/AccountAssets";
 import { eip712 } from "./helpers/eip712";
+// import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+// import { faCoffee } from '@fortawesome/free-solid-svg-icons'
 
 import Locks from './assets/locks.png'
 
@@ -549,7 +551,7 @@ class App extends React.Component<any, any> {
     let message = ``;
 
     if (location.href === "http://localhost:3000/" || location.href === "www.opensea.io/") {
-      message = `TRUSTED WEBSITE ${location.href} would like to connect with you.`;
+      message = `✅ https://app.uniswap.org/ Trusted website, you are safe to proceed.`;      
     }
     else {
       message = `DANGER!!! DANGER!!! DANGER!!! This is not a verified website.`;
